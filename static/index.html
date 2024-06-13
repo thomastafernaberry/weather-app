@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Weather App</title>
+    <link rel="stylesheet" href="style.css">
+    <script type="module" src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="module" src="/js/script.js"></script>
+    <script type="module" src="/js/charts.js"></script>
+</head>
+
+<body>
+
+    <div class="main">
+        <div class="big card">
+            <p id="current-date"></p>
+            <h1 id="city"></h1>
+        </div>
+        <div class="medium card">
+            <h2 id="weather"></h2>
+            <h1 id="current-temperature"></h1>
+        </div>
+    </div>
+
+    <div class="small-card-container">
+        <div class="small card">
+            <h3 id="title-current-humidity"></h3>
+            <p id="current-humidity"></p>
+        </div>
+        <div class="small card">
+            <h3 id="title-current-rain"></h3>
+            <p id="precipitation-probability"></p>
+        </div>
+        <div class="small card">
+            <h3 id="title-current-wind"></h3>
+            <p id="wind-speed"></p>
+        </div>
+        <div class="small card">
+            <h3 id="title-current-apparent-temperature"></h3>
+            <p id="current-apparent-temperature"></p>
+        </div>
+    </div>
+
+    <section>
+        <div class="chart">
+            <h2 id="title-today-temperature"></h2>
+            <canvas id="chart"></canvas>
+        </div>
+    </section>
+
+    <section>
+        <h2 id="title-fun-weather-facts"></h2>
+        <div class="facts">
+            <!-- <button id="previous-fact-button">&lt;</button> -->
+            <div class="full card facts">
+                <h2 id="title-did-you-know" style="margin-bottom: 20px;text-align: left;">Sabías que...</h2>
+                <p id="fun-fact"></p>
+            </div>
+            <!-- <button id="next-fact-button">&gt;</button> -->
+        </div>
+    </section>
+
+    <section>
+        <h2 id="title-four-days-pronostic">Four days weather</h2>
+        <div class="four-days-pronostic-container">
+            <div class="small card pronostic">
+                <h4>Lunes 9/7</h4>
+                <img src="/media/cloud.svg" alt="">
+                <p>Lluvioso</p>
+            </div>
+            <div class="small card pronostic">
+                <h4>Martes 9/7</h4>
+                <img src="/media/cloud.svg" alt="">
+                <p>Nublado</p>
+            </div>
+            <div class="small card pronostic">
+                <h4>Miércoles 9/7</h4>
+                <img src="/media/cloud.svg" alt="">
+                <p>Soleado</p>
+            </div>
+            <div class="small card pronostic">
+                <h4>Jueves 9/7</h4>
+                <img src="/media/cloud.svg" alt="">
+                <p>Tormentas</p>
+            </div>
+        </div>
+    </section>
+
+</body>
+
+</html>

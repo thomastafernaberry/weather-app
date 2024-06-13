@@ -1,0 +1,172 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Mono:wght@400;500;700&display=swap');
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    max-width: 1025px;
+    background-color: #b0bfc5;
+    color: #1E1E1E;
+    margin-inline: auto;
+    font-family: "Fira Mono";
+    padding: 10px;
+}
+
+body section {
+    margin-block: 4vh;
+}
+
+body section h2 {
+    margin-bottom: 2vh;
+}
+
+h1,
+h2,
+h3,
+p {
+    margin: 0;
+}
+
+h1 {
+    font-size: clamp(40px, 10vw, 66px);
+    font-weight: bold;
+}
+
+h2 {
+    font-size: clamp(20px, 5vw, 30px);
+    margin-block: 10px;
+}
+
+h3 {
+    font-size: clamp(15px, 4vw, 20px);
+    font-weight: bold;
+}
+
+h4 {
+    margin: 0;
+    font-size: 18px;
+}
+
+p {
+    font-size: 16px;
+    line-height: 30px;
+}
+
+.main {
+    display: grid;
+    grid-template-columns: 5fr 3fr;
+    gap: 2%;
+    margin-bottom: 20px;
+    min-height: 25vh;
+}
+
+.main .card {
+    padding: 0 40px 0 40px;
+}
+
+.card {
+    display: grid;
+    align-content: center;
+    border-radius: 10px;
+    background-color: #e1e8eb;
+    color: #1E1E1E;
+    border: solid 2px #1E1E1E;
+    box-shadow: 3px 3px #1E1E1E;
+}
+
+.card.full {
+    width: 100%;
+    padding: 40px;
+    background-color: rgb(25, 90, 160);
+    color: white;
+}
+
+.card.big {
+    background-color: rgba(121, 82, 179, 1);
+    color: white;
+}
+
+.card.medium {
+    background-color: rgba(255, 193, 7, 1);
+}
+
+.card.small {
+    text-align: center;
+    min-height: 80px;
+}
+
+.small-card-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 6% 2%;
+}
+
+.four-days-pronostic-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 220px);
+    justify-content: space-between;
+    gap: 2%;
+}
+
+.card.pronostic {
+    display: grid;
+    justify-content: center;
+    align-items: start;
+    min-height: 300px;
+    box-shadow: none;
+}
+
+.card.pronostic img {
+    max-height: 150px;
+}
+
+.card.pronostic p {
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+/* .facts button {
+    width: 100px;
+    display: grid;
+    place-items: center;
+    width: 100px;
+    border-radius: 10px;
+    font-size: 30px;
+    height: 80px;
+    margin-top: 2%;
+} */
+
+
+@media (max-width: 825px) {
+    .main {
+        grid-template-columns: 1fr;
+        margin-bottom: 4%;
+    }
+
+    .main .card {
+        padding: 8%;
+        margin-bottom: 2%;
+    }
+
+    #city {
+        max-width: min-content;
+    }
+
+    .small-card-container {
+        gap: 8% 4%;
+    }
+
+    body {
+        padding: 5px 10px;
+    }
+
+    body section {
+        margin-block: 10vh;
+    }
+
+    body section h2 {
+        font-size: 25px;
+        text-align: center;
+    }
+}
