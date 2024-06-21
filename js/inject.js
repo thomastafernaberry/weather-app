@@ -1,5 +1,5 @@
 import { getData } from "./weather.js";
-import { appLanguage } from "./languages.js";
+import { appLanguage } from "./language.js";
 
 const $CITY = document.getElementById('city');
 const $CURRENT_TEMP = document.getElementById('current-temperature');

@@ -56,5 +56,5 @@ async function buildUrl() {
 async function getData() {
     const url = await buildUrl();
     const data = await fetch(url).then(result => result.json());
-    return data
+    return data;
 }
