@@ -1,5 +1,5 @@
 import { getData } from './weather.js'
-import { appLanguage } from './languages.js';
+import { appLanguage } from './language.js';
 
 document.addEventListener('DOMContentLoaded', async function () {
   const $CHART = document.getElementById('chart');
@@ -12,13 +12,13 @@ document.addEventListener('DOMContentLoaded', async function () {
     data: {
       labels: $25hoursIn24HoursFormat,
       datasets: [{
-        label: appLanguage.temperature,
-        data: data.hourly.temperature_2m.slice(0, 25) + data.hourly_units.temperature_2m,
+        label: `${appLanguage.temperature} in ${data.hourly_units.temperature_2m}`,
+        data: data.hourly.temperature_2m.slice(0, 25),
         borderWidth: 2
       }]
     },
     options: {
-      aspectRatio: 2,
+      aspectRatio: 1.5,
       onHover: {},
       interaction: {
         axis: 'x'
