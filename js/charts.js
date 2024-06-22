@@ -1,9 +1,9 @@
-import { getData } from './weather.js'
-import { appLanguage } from './language.js';
+import { getWeatherData} from './weather.js'
+import { appCurrentLanguage } from './language.js';
 
 document.addEventListener('DOMContentLoaded', async function () {
   const $CHART = document.getElementById('chart');
-  const data = await getData();
+  const data = await getWeatherData();
 
   const $25hoursIn24HoursFormat = ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '00:00'];
 
@@ -12,13 +12,13 @@ document.addEventListener('DOMContentLoaded', async function () {
     data: {
       labels: $25hoursIn24HoursFormat,
       datasets: [{
-        label: `${appLanguage.temperature} in ${data.hourly_units.temperature_2m}`,
+        label: `${appCurrentLanguage.temperature} in ${data.hourly_units.temperature_2m}`,
         data: data.hourly.temperature_2m.slice(0, 25),
         borderWidth: 2
       }]
     },
     options: {
-      aspectRatio: 1.5,
+      aspectRatio: 2,
       onHover: {},
       interaction: {
         axis: 'x'
