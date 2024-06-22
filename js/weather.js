@@ -1,4 +1,4 @@
-export { getData }
+export { getWeatherData }
 
 async function getUserCoords() {
     let userCoords = new Promise((resolve, reject) => {
@@ -20,6 +20,13 @@ async function getUserCoords() {
 }
 
 async function buildUrl() {
+    const baseUrl = 'https://api.open-meteo.com/v1/forecast';
+    const query = await buildQuery();
+    return baseUrl + query;
+}
+
+async function buildQuery() {
+    let query = '?';
     const userCoords = await getUserCoords();
     const parameters = {
         latitude: userCoords[0], 
@@ -32,28 +39,23 @@ async function buildUrl() {
             daily: ["temperature_2m_max", "temperature_2m_max", "weather_code"]
         }
     }
-    const baseUrl = 'https://api.open-meteo.com/v1/forecast';
-    function buildQuery() {
-        let query = '?';
-        for (const [key, value] of Object.entries(parameters)) {
-            if (typeof value === 'object') {
-                for (const [k, v] of Object.entries(value)) {
-                    query += `${k}=${v}&`;
-                }
-            }
-            else {
-                query += `${key}=${value}&`;
+    for (const [key, value] of Object.entries(parameters)) {
+        if (typeof value === 'object') {
+            for (const [k, v] of Object.entries(value)) {
+                query += `${k}=${v}&`;
             }
         }
-        if (query.endsWith('&')) {
-            query = query.slice(0, -1)
+        else {
+            query += `${key}=${value}&`;
         }
-        return query
     }
-    return baseUrl + buildQuery();
+    if (query.endsWith('&')) {
+        query = query.slice(0, -1)
+    }
+    return query
 }
 
-async function getData() {
+async function getWeatherData() {
     const url = await buildUrl();
     const data = await fetch(url).then(result => result.json());
     return data;
