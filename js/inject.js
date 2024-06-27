@@ -1,14 +1,9 @@
-import { getWeatherData } from "./weather.js";
+import Weather from "./weather.js";
 import { appCurrentLanguage } from "./language.js";
 
-function timezoneCityParser(timezone) {
-    const lastSlashIndex = timezone.lastIndexOf('/');
-    const city = timezone.slice(lastSlashIndex + 1).replace('_', ' ');
-    return city;
-}
+async function injectWeatherDataIntoDOM() {
+    const $ = e => document.getElementById(e);
 
-document.addEventListener('DOMContentLoaded', () => {
-    const $ = (e) => document.getElementById(e);
     // Definitions' names that are DOM elements start with $ 
     const $CITY = $('city');
     const $CURRENT_TEMP = $('current-temperature');
@@ -21,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const $CURRENT_DATE = $('current-date');
     // const $PREVIOUS_FACT_BUTTON = $('previous-fact-button');
     // const $NEXT_FACT_BUTTON = $('next-fact-button');
-    
+
     // $TITLE is used for to-be-translated text
     const $TITLE_CURRENT_HUMIDITY = $('title-current-humidity');
     const $TITLE_CURRENT_WIND = $('title-current-wind');
@@ -32,41 +27,48 @@ document.addEventListener('DOMContentLoaded', () => {
     // const $TITLE_FUN_WEATHER_FACTS = $('title-fun-weather-facts');
     // const $TITLE_FOUR_DAYS_PRONOSTIC = $('title-four-days-pronostic');
 
-    async function injectWeatherDataInDOM() {
-        const data = await getWeatherData();
-        const currentWeather = data.current;
-        const currentUnits = data.current_units;
-        const currentDate = new Date(data.current.time);
-        const options = {
-            weekday: 'long',
-            month: 'long',
-            day: 'numeric'
-        }
-        console.log(appCurrentLanguage);
-        // Weather data.
-        $CURRENT_DATE.innerText = `${currentDate.toLocaleString(navigator, options)}`;
-        $CITY.innerText = timezoneCityParser(data.timezone);
-        $CURRENT_TEMP.innerText = `${currentWeather.temperature_2m}${currentUnits.temperature_2m}`;
-        $CURRENT_HUMIDITY.innerText = `${currentWeather.relative_humidity_2m}${currentUnits.relative_humidity_2m}`;
-        $CURRENT_WEATHER.innerText = `${appCurrentLanguage.weatherCodeDescription[currentWeather.weather_code]}`;
-        $CURRENT_WIND_SPEED.innerText = `${currentWeather.wind_speed_10m}${currentUnits.wind_speed_10m}`;
-        $CURRENT_PRECIP_PROB.innerText = `${currentWeather.precipitation_probability}${currentUnits.precipitation_probability}`;
-        $CURRENT_APPARENT_TEMP.innerText = `${currentWeather.apparent_temperature}${currentUnits.apparent_temperature}`;
-        $FUN_FACT.innerText = appCurrentLanguage.facts[Math.floor((Math.random() * appCurrentLanguage.facts.length))];
-        // Text translation.
-        $TITLE_CURRENT_HUMIDITY.innerText = appCurrentLanguage.humidity;
-        $TITLE_CURRENT_WIND.innerText = appCurrentLanguage.wind;
-        $TITLE_CURRENT_RAIN.innerText = appCurrentLanguage.rain;
-        $TITLE_CURRENT_APPARENT_TEMP.innerText = appCurrentLanguage.apparentTemp;
-        $TITLE_TODAY_TEMPERATURE.innerText = appCurrentLanguage.todayTemp;
-        $TITLE_DID_YOU_KNOW.innerText = appCurrentLanguage.didYouKnow;
-        // $TITLE_FUN_WEATHER_FACTS.innerText = language.funWeatherFacts;
-        // $TITLE_FOUR_DAYS_PRONOSTIC.innerText = language;
+    const weatherObj = await (new Weather).initAsync();
+    console.log(weatherObj)
+    const weatherJson = await weatherObj.getResponseAsJsonAsync();
+    const currentWeather = weatherJson.current;
+    const currentUnits = weatherJson.current_units;
+
+    const currentDate = new Date(currentWeather.time);
+    const options = {
+        weekday: 'long',
+        month: 'long',
+        day: 'numeric'
     }
 
-    injectWeatherDataInDOM();
-})
+    function timezoneCityParser(timezone) {
+        const lastSlashIndex = timezone.lastIndexOf('/');
+        const city = timezone.slice(lastSlashIndex + 1).replace('_', ' ');
+        return city;
+    }
 
+    // Set weather data.
+    $CURRENT_DATE.innerText = `${currentDate.toLocaleString(navigator, options)}`;
+    $CITY.innerText = timezoneCityParser(weatherJson.timezone);
+    $CURRENT_TEMP.innerText = `${currentWeather.temperature_2m}${currentUnits.temperature_2m}`;
+    $CURRENT_HUMIDITY.innerText = `${currentWeather.relative_humidity_2m}${currentUnits.relative_humidity_2m}`;
+    $CURRENT_WEATHER.innerText = `${appCurrentLanguage.weatherCodeDescription[currentWeather.weather_code]}`;
+    $CURRENT_WIND_SPEED.innerText = `${currentWeather.wind_speed_10m}${currentUnits.wind_speed_10m}`;
+    $CURRENT_PRECIP_PROB.innerText = `${currentWeather.precipitation_probability}${currentUnits.precipitation_probability}`;
+    $CURRENT_APPARENT_TEMP.innerText = `${currentWeather.apparent_temperature}${currentUnits.apparent_temperature}`;
+    $FUN_FACT.innerText = appCurrentLanguage.facts[Math.floor((Math.random() * appCurrentLanguage.facts.length))];
+
+    // Set text translation.
+    $TITLE_CURRENT_HUMIDITY.innerText = appCurrentLanguage.humidity;
+    $TITLE_CURRENT_WIND.innerText = appCurrentLanguage.wind;
+    $TITLE_CURRENT_RAIN.innerText = appCurrentLanguage.rain;
+    $TITLE_CURRENT_APPARENT_TEMP.innerText = appCurrentLanguage.apparentTemp;
+    $TITLE_TODAY_TEMPERATURE.innerText = appCurrentLanguage.todayTemp;
+    $TITLE_DID_YOU_KNOW.innerText = appCurrentLanguage.didYouKnow;
+    // $TITLE_FUN_WEATHER_FACTS.innerText = language.funWeatherFacts;
+    // $TITLE_FOUR_DAYS_PRONOSTIC.innerText = language;
+}
+
+injectWeatherDataIntoDOM()
 
 // // TODO DEBUG FACT BUTTONS
 

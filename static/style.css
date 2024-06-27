@@ -29,7 +29,7 @@ p {
 }
 
 h1 {
-    font-size: clamp(40px, 10vw, 66px);
+    font-size: clamp(40px, 10vw, 60px);
     font-weight: bold;
 }
 
@@ -39,8 +39,9 @@ h2 {
 }
 
 h3 {
-    font-size: clamp(15px, 4vw, 18px);
+    font-size: clamp(15px, 4vw, 16px);
     font-weight: bold;
+    margin-bottom: 4px;
 }
 
 h4 {
@@ -49,8 +50,12 @@ h4 {
 }
 
 p {
-    font-size: 16px;
+    font-size: clamp(13px, 4vw, 16px);
     line-height: 30px;
+}
+
+h2#weather  {
+    margin: 0;
 }
 
 .main {
@@ -166,7 +171,6 @@ p {
     }
 
     body section h2 {
-        font-size: 25px;
-        text-align: center;
+        font-size: 20px;
     }
 }

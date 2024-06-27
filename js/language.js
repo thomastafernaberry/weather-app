@@ -1,5 +1,5 @@
+export { appCurrentLanguage };
 import { weatherFacts } from "./facts.js";
-export { appCurrentLanguage }
 
 const languages = {
         en: {
@@ -9,8 +9,11 @@ const languages = {
                 rain: 'Rain',
                 apparentTemp: 'Feels Like',
                 todayTemp: 'Today\'s Temperature',
-                didYouKnow: 'Did you know',
+                didYouKnow: 'Did you know?',
                 facts: weatherFacts.english,
+                alertMessages: {
+                        locationNeeded: 'Hey! You need to grant us permission so we can access your location.'
+                },
                 weatherCodeDescription: {
                         0: 'Clear sky',
                         1: 'Mainly clear',
