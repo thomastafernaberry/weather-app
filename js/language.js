@@ -9,7 +9,7 @@ const languages = {
                 rain: 'Rain',
                 apparentTemp: 'Feels Like',
                 todayTemp: 'Today\'s Temperature',
-                didYouKnow: 'Did you know?',
+                didYouKnow: 'Did you know',
                 facts: weatherFacts.english,
                 alertMessages: {
                         locationNeeded: 'Hey! You need to grant us permission so we can access your location.'

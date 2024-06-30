@@ -4,8 +4,9 @@ class Fetch {
     baseUrl = '';
     query = '';
     fullUrl = '';
+    cacheName = '';
 
-    setQuery(parameters) {
+    buildQuery(parameters) {
         let query = '?';
         for (const [key, value] of Object.entries(parameters)) {
             if (typeof value === 'object') {
@@ -20,47 +21,58 @@ class Fetch {
         if (query.endsWith('&')) {
             query = query.slice(0, -1);
         }
+
         return query;
     }
 
-    async getResponseAsync(fullUrl, cacheName) {
+    async getResponseAsync(url, cacheName) {
 
-        async function setResponseToCacheAsync(fullUrl, cacheName) {
+        async function deleteCacheAsync() {
             try {
-                const browserCache = await caches.open(cacheName);
-                browserCache.add(fullUrl);
+                const toDeleteCache = await caches.open(cacheName); 
+                for (const urlInCache of await toDeleteCache.keys()) {
+                    console.log(`Deleting ${urlInCache} of ${toDeleteCache}`);
+                    toDeleteCache.delete(urlInCache);
+                }
             } catch (error) {
-                console.alert(error);
-            }
-        }
-    
-        async function getResponseFromCacheAsync(fullUrl, cacheName) {
-            try {
-                const browserCache = await caches.open(cacheName);
-                const response = browserCache.match(fullUrl);
-                return response;
-            } catch (error) {
-                console.alert(error);
+                console.error(error);
             }
         }
 
-        try {
-            return await getResponseFromCacheAsync(fullUrl, cacheName);
-        } catch {
-            await setResponseToCacheAsync(fullUrl, cacheName);
-            return await getResponseFromCacheAsync(fullUrl, cacheName);
+        if (navigator.caches) {
+            await deleteCacheAsync();
+            const cache = await caches.open(cacheName);
+            const response = await cache.match(url);
+            if (response === undefined) {
+                console.log('Response not found in cache. Setting new one...')
+                await cache.add(url);
+                return await cache.match(url);
+            }
+            return response
+        } else {
+            console.log('Cache API not available. Using Fetch.');
+            return await fetch(url);
         }
     }
+
+    async getResponseAsJsonAsync(fullUrl, cacheName) {
+        const response = await this.getResponseAsync(fullUrl, cacheName);
+        console.log('To JSON: ' + response)
+        return await response.json();
+    }
+
 }
 
 export default class Weather extends Fetch {
-
-    async #getUserCoords() {
-        let userCoords = new Promise((resolve, reject) => {
+    constructor() {
+        super();
+    }
+    async getUserCoordsAsync() {
+        const userCoords = new Promise((resolve, reject) => {
             function success(geoPosition) {
                 const userLat = geoPosition.coords.latitude;
                 const userLon = geoPosition.coords.longitude;
-                resolve([userLat, userLon])
+                resolve ([userLat, userLon])
             }
             function error(error) {
                 reject(error);
@@ -71,11 +83,11 @@ export default class Weather extends Fetch {
             }
             navigator.geolocation.getCurrentPosition(success, error, options);
         })
+        
         return userCoords;
     }
-
     async initAsync() {
-        let userCoords = await this.#getUserCoords();
+        let userCoords = [-34.61, -58.38];
         this.parameters = {
             latitude: userCoords[0],
             longitude: userCoords[1],
@@ -88,17 +100,20 @@ export default class Weather extends Fetch {
             }
         }
         this.baseUrl = 'https://api.open-meteo.com/v1/forecast';
-        this.query = super.setQuery(this.parameters);
+        this.query = super.buildQuery(this.parameters);
         this.fullUrl = this.baseUrl + this.query;
+        this.cacheName = 'weather';
+
         return this;
     }
-
-    async getResponseAsync() {
-        return await super.getResponseAsync(this.fullUrl, 'weather');
+    async getWeatherAsync() {
+        return await super.getResponseAsync(this.fullUrl, this.cacheName);
     }
-
-    async getResponseAsJsonAsync() {
-        const response = await this.getResponseAsync();
-        return response.json();
+    async getWeatherJsonAsync() {
+        return await super.getResponseAsJsonAsync(this.fullUrl, this.cacheName);
     }
 }
+
+const weatherObj = await (new Weather).initAsync();
+const weatherJson = await weatherObj.getWeatherJsonAsync();
+export { weatherJson };
