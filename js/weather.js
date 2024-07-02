@@ -20,6 +20,8 @@ class Fetch {
 
      async getResponseAsync(url, cacheName) {
 
+          const cache = await caches.open(cacheName);
+
           async function deleteOldCacheAsync() {
 
                function isResponseOld(response) {
@@ -34,11 +36,11 @@ class Fetch {
                }
 
                try {
-                    const cache = await caches.open(cacheName);
-                    for (const response of await cache.matchAll()) {
+                    for (const request of await cache.keys()) {
+                         const response = await cache.match(request.url);
                          if (isResponseOld(response)) {
-                              console.log('Deleting old response in cache...');
-                              cache.delete(url);
+                              console.log(`Deleting old response in cache...`);
+                              cache.delete(request);
                          }
                     }
                }
@@ -50,7 +52,6 @@ class Fetch {
 
           if (window.caches) {
                await deleteOldCacheAsync();
-               const cache = await caches.open(cacheName);
                const responseInCache = await cache.match(url);
 
                if (responseInCache === undefined) {
