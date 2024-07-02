@@ -41,16 +41,16 @@ body {
     }
 
     p {
-        font-size: clamp(13px, 4vw, 16px);
+        font-size: clamp(10px, 4vw, 16px);
         line-height: 30px;
     }
 
     section {
-        margin-block: 4vh;
+        margin-block: 6vh;
     }
 
     section h2 {
-        margin-left: 5px;
+        margin: 0 0 20px 5px;
     }
 }
 
@@ -105,26 +105,31 @@ body {
 
 .four-days-pronostic-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, 220px);
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     justify-content: space-between;
     gap: 2%;
 }
 
 .card.pronostic {
     display: grid;
-    justify-content: center;
-    align-items: start;
-    min-height: 300px;
+    place-content: left;
+    padding: 30px 10px 30px 20px;
     box-shadow: none;
-}
 
-.card.pronostic img {
-    max-height: 150px;
-}
+    h4 {
+        margin-bottom: 15px;
+    }
 
-.card.pronostic p {
-    font-weight: bold;
-    letter-spacing: 1px;
+    p {
+        letter-spacing: 1px;
+        margin-bottom: 5px;
+    }
+
+    &img {
+        max-height: 150px;
+    }
+
+
 }
 
 /* .facts button {
@@ -141,6 +146,36 @@ body {
 
 @media (max-width : 870px) {
 
+    body {
+        padding: 5px 10px;
+
+        &section {
+            margin-block: 10vh;
+
+            &h2 {
+                font-size: 20px;
+            }
+        }
+    }
+
+    .card {
+        &.full {
+            padding: 20px 30px;
+        }
+
+        &.pronostic {
+            padding: 20px;
+
+            h4 {
+                font-size: 14px;
+            }
+
+            p {
+                font-size: 14px;
+            }
+        }
+    }
+
     .first-row {
         grid-template-columns: 1fr;
         gap: 15px;
@@ -156,20 +191,9 @@ body {
         gap: 10px 4%;
     }
 
-    .card.full {
-        padding: 20px 30px;
-    }
-
-    body {
-        padding: 5px 10px;
-
-        &section {
-            margin-block: 10vh;
-
-            &h2 {
-                font-size: 20px;
-            }
-        }
+    .four-days-pronostic-container {
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+        justify-content: center;
     }
 
 }

@@ -97,43 +97,86 @@ class WeatherFunFacts extends HTMLElement {
     }
 }
 
-class FourDaysPronostic extends HTMLElement {
+class Pronostic extends HTMLElement {
+    constructor() {
+        super();
+    }
+    getDateNames(date) {
+        const dateObj = new Date(date);
+        const options = {
+            weekday: 'long',
+            day: 'numeric',
+            month: 'numeric'
+            
+        }
+        return dateObj.toLocaleString('en', options);
+    }
+    getForecast(daysNumber) {
+        let forecastArray = [];
+        for (let i = 0; i <= daysNumber; i++) {
+            forecastArray.push(
+                {
+                    date: this.getDateNames(weatherJson.daily.time[i]),
+                    maxTemp: weatherJson.daily.temperature_2m_max[i],
+                    minTemp: weatherJson.daily.temperature_2m_min[i]
+                }
+            )
+        }
+        return forecastArray;  
+    }
+}
+
+class FourDaysPronostic extends Pronostic {
     constructor() {
         super();
     }
     connectedCallback() {
-        this.innerHTML = `
-        <h2 id="title-four-days-pronostic">Four days weather</h2>
-        <div class="four-days-pronostic-container">
-            <div class="small card pronostic">
-                <h4>Lunes 9/7</h4>
-                <img src="/media/cloud.svg" alt="">
-                <p>Lluvioso</p>
+        try {
+            const forecastArray = super.getForecast(4);
+            let forecast1 = forecastArray[1];
+            let forecast2 = forecastArray[2];
+            let forecast3 = forecastArray[3];
+            let forecast4 = forecastArray[4];
+            let unit = weatherJson.daily_units.temperature_2m_max;
+            this.innerHTML = `
+            <section class="weather">
+            <h2>Four days weather</h2>
+            <div class="four-days-pronostic-container">
+                <div class="card pronostic">
+                    <h4>${forecast1.date}</h4>
+                    <p>Max. ${forecast1.maxTemp}${unit}</p>
+                    <p>Min. ${forecast1.minTemp}${unit}</p>
+                </div>
+                <div class="card pronostic">
+                    <h4>${forecast2.date}</h4>
+                    <p>Max. ${forecast2.maxTemp}${unit}</p>
+                    <p>Min. ${forecast2.minTemp}${unit}</p>
+                </div>
+                <div class="card pronostic">
+                    <h4>${forecast3.date}</h4>
+                    <p>Max. ${forecast3.maxTemp}${unit}</p>
+                    <p>Min. ${forecast3.minTemp}${unit}</p>
+                </div>
+                <div class="card pronostic">
+                    <h4>${forecast4.date}</h4>
+                    <p>Max. ${forecast4.maxTemp}${unit}</p>
+                    <p>Min. ${forecast4.minTemp}${unit}</p>
+                </div>
             </div>
-            <div class="small card pronostic">
-                <h4>Martes 9/7</h4>
-                <img src="/media/cloud.svg" alt="">
-                <p>Nublado</p>
-            </div>
-            <div class="small card pronostic">
-                <h4>Miércoles 9/7</h4>
-                <img src="/media/cloud.svg" alt="">
-                <p>Soleado</p>
-            </div>
-            <div class="small card pronostic">
-                <h4>Jueves 9/7</h4>
-                <img src="/media/cloud.svg" alt="">
-                <p>Tormentas</p>
-            </div>
-        </div>`
+            </section>`
+        } catch (error) {
+            console.error(error);
+        }
+
     }
 }
 
 customElements.define('city-date', CityDate);
 customElements.define('current-weather-temperature', CurrentWeatherTemperature);
 customElements.define('current-weather-data', CurrentWeatherData);
-customElements.define('weather-fun-facts', WeatherFunFacts);
 customElements.define('chart-today-temperature', ChartTodayTemperature);
+customElements.define('weather-fun-facts', WeatherFunFacts);
+customElements.define('forecast-four-days', FourDaysPronostic);
 
 // // TODO DEBUG FACT BUTTONS
 
